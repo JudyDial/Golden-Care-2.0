@@ -7,11 +7,11 @@ services:
       - "15432:15432"
     environment:
       - CUBEJS_DEV_MODE=true
-      - CUBEJS_DB_HOST=postgres
-      - CUBEJS_DB_NAME=gc_db
-      - CUBEJS_DB_USER=gc_user
-      - CUBEJS_DB_PASS=root_password
-      - CUBEJS_DB_PORT=5432
+      # - CUBEJS_DB_HOST=postgres
+      # - CUBEJS_DB_NAME=gc_db
+      # - CUBEJS_DB_USER=gc_user
+      # - CUBEJS_DB_PASS=root_password
+      # - CUBEJS_DB_PORT=5432
     volumes:
       - .:/cube/conf
     depends_on:
