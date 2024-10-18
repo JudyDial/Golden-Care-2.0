@@ -132,11 +132,8 @@ class Patient(CustomUser):
     )
     gender = models.CharField(max_length=50, choices=GENDER_CHOICES, default='male')
     location = models.CharField(max_length=50, default="N/A")
-    
-    # New fields for monitoring vitals
-    vitals = models.JSONField(blank=True, null=True)  # To store vitals like heart rate, temperature, etc.
-    last_vitals_update = models.DateTimeField(auto_now=True)  # Record when vitals were last updated
-    
+    latitude = models.FloatField(blank=True, null=True, verbose_name="Latitude")
+    longitude = models.FloatField(blank=True, null=True, verbose_name="Longitude")
     class Meta:
         verbose_name = "Patient"
         verbose_name_plural = "Patients"

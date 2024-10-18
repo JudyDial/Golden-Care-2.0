@@ -38,7 +38,7 @@ EXPOSE 8000
 FROM base AS final
 
 # Default command to run Daphne server for ASGI setup
-CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "Golden_Care.asgi:application"]
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "Golden_Care.asgi:application & python manage.py mqtt_subscribe"]
 
 # Alternatively, if using Uvicorn, replace the above CMD with:
 # CMD ["uvicorn", "Golden_Care.asgi:application", "--host", "0.0.0.0", "--port", "8000", "--workers", "3"]
