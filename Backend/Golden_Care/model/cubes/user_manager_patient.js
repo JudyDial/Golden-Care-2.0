@@ -1,41 +1,50 @@
 cube(`user_manager_patient`, {
-  sql_table: `public."userManager_patient"`,
-  
-  data_source: `default`,
-  
-  joins: {
-    
-  },
-  
+  sql: `SELECT * FROM public."userManager_patient"`,
+
+  dataSource: `default`,
+
   dimensions: {
     customuser_ptr_id: {
       sql: `customuser_ptr_id`,
-      type: `string`
+      type: `string`,
+      primaryKey: true // Marking this as the primary key
     },
-    
+
+    username: {
+      sql: `username`,
+      type: `string`,
+      description: `Patient's username`
+    },
+
+    email: {
+      sql: `email`,
+      type: `string`,
+      description: `Patient's email`
+    },
+
     gender: {
       sql: `gender`,
       type: `string`
     },
-    
+
     location: {
       sql: `location`,
       type: `string`
     },
-    
+
     date_of_birth: {
       sql: `date_of_birth`,
       type: `time`
     }
   },
-  
+
   measures: {
     count: {
       type: `count`
     }
   },
-  
-  pre_aggregations: {
+
+  preAggregations: {
     // Pre-aggregation definitions go here.
     // Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
   }

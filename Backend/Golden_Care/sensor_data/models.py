@@ -85,4 +85,50 @@ class SensorData(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)  # Timestamp of data
 
     def __str__(self):
-        return f"Sensor Data for {self.patient.name} at {self.timestamp}"
+        return f"Sensor Data for {self.patient.username} at {self.timestamp}"
+
+
+class Alert(models.Model):
+    """
+    Model to store alerts/notifications generated for a patient's health status.
+
+    Attributes:
+        alert_id (UUIDField): A unique identifier for each alert.
+        patient (ForeignKey): Reference to the Patient model.
+        alert_type (CharField): Type of the alert (e.g., high temperature, low SpO2, etc.).
+        description (TextField): Description of the alert, detailing the health issue.
+        is_active (BooleanField): Indicates if the alert is currently active.
+        created_at (DateTimeField): Timestamp when the alert was created.
+        resolved_at (DateTimeField): Timestamp when the alert was resolved, null if still active.
+    """
+    ALERT_TYPE_CHOICES = [
+        ('high_temp', 'High Temperature'),
+        ('low_spo2', 'Low SpO2'),
+        ('high_heart_rate', 'High Heart Rate'),
+        ('low_heart_rate', 'Low Heart Rate'),
+        # Add other alert types as needed
+    ]
+
+    alert_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='alerts')
+    alert_type = models.CharField(max_length=50, choices=ALERT_TYPE_CHOICES)
+    description = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)  # When the alert is resolved
+
+    class Meta:
+        verbose_name = "Alert"
+        verbose_name_plural = "Alerts"
+        unique_together = ('patient', 'alert_type', 'is_active')  # Ensure no duplicate active alerts for the same patient
+
+    def __str__(self):
+        return f"Alert {self.alert_type} for {self.patient.username}"
+
+    def resolve_alert(self):
+        """
+        Mark the alert as resolved and deactivate it.
+        """
+        self.is_active = False
+        self.resolved_at = timezone.now()
+        self.save()

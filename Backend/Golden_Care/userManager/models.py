@@ -127,13 +127,18 @@ class Patient(CustomUser):
     date_of_birth = models.DateField(blank=False, null=True)
     emergency_contact = models.ManyToManyField(
         EmergencyContact, 
-        blank=True, 
+        blank=True,
         related_name='Patients_with_contact'  # Add a unique related_name to avoid future conflicts
     )
     gender = models.CharField(max_length=50, choices=GENDER_CHOICES, default='male')
     location = models.CharField(max_length=50, default="N/A")
     latitude = models.FloatField(blank=True, null=True, verbose_name="Latitude")
     longitude = models.FloatField(blank=True, null=True, verbose_name="Longitude")
+    bmi = models.FloatField(blank=True, null=True, verbose_name="bmi")
+    smoking_history = models.BooleanField(default=False,)
+    heart_disease = models.BooleanField(default=False, null=True,)
+    hypertension = models.BooleanField(default=False, null=True)
+    
     
     class Meta:
         verbose_name = "Patient"

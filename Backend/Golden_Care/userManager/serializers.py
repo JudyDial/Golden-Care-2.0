@@ -7,10 +7,10 @@ from allauth.account.utils import setup_user_email
 from django.db import transaction
 from django.core.exceptions import ValidationError as DjangoValidationError
 from .models import CustomUser, Patient, Provider, Admin, EmergencyContact
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 User = get_user_model()
-
 class CustomRegisterSerializer(RegisterSerializer):
     """
     Custom serializer for handling user registration.
@@ -22,6 +22,11 @@ class CustomRegisterSerializer(RegisterSerializer):
     Provider_name = serializers.CharField(required=False, allow_blank=True)
     address = serializers.CharField(required=False, allow_blank=True)
 
+    # New Patient-specific fields
+    date_of_birth = serializers.DateField(required=False)
+    gender = serializers.ChoiceField(choices=Patient.GENDER_CHOICES, required=False, allow_blank=True)
+    location = serializers.CharField(required=False, allow_blank=True)
+    
     def get_cleaned_data(self):
         """
         Retrieve cleaned data from the request, including additional custom fields.
@@ -30,6 +35,9 @@ class CustomRegisterSerializer(RegisterSerializer):
         data['user_type'] = self.validated_data.get('user_type', '')
         data['email'] = self.validated_data.get('email', '')
         data['username'] = self.validated_data.get('username', self.generate_username_from_email(data['email']))
+        data['date_of_birth'] = self.validated_data.get('date_of_birth', None)
+        data['gender'] = self.validated_data.get('gender', '')
+        data['location'] = self.validated_data.get('location', '')
         return data
 
     def generate_username_from_email(self, email):
@@ -57,9 +65,11 @@ class CustomRegisterSerializer(RegisterSerializer):
         first_name = request.data.get('first_name', '')
         last_name = request.data.get('last_name', '')
         Provider_name = request.data.get('Provider_name', '')
-        location = request.data.get('location', '')
+        location = self.cleaned_data.get('location', 'N/A')
         status = request.data.get('status', '')
         address = request.data.get('address', '')
+        gender = self.cleaned_data.get('gender', 'male')  # Default gender if not provided
+        date_of_birth = self.cleaned_data.get('date_of_birth', None)
 
         # Validate email before saving
         self.validate_email(self.cleaned_data['email'])
@@ -76,7 +86,9 @@ class CustomRegisterSerializer(RegisterSerializer):
                     email=email,
                     first_name=first_name,
                     last_name=last_name,
-                    date_of_birth=None,  # Add more Patient-specific fields if needed
+                    date_of_birth=date_of_birth,
+                    gender=gender,
+                    location=location,
                 )
             elif user_type == 'provider':
                 Provider_name = Provider_name or first_name  # Use Provider_name or fallback to first_name
@@ -109,6 +121,7 @@ class CustomRegisterSerializer(RegisterSerializer):
             setup_user_email(request, user, [])
 
             return user
+
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -160,10 +173,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Patient
-        fields = [
-            'id', 'username', 'email', 'first_name', 'last_name', 'image', 'contact_number',
-            'user_type', 'is_admin', 'date_of_birth', 'emergency_contact', 'password'
-        ]
+        fields = '__all__'
         extra_kwargs = {
             'password': {'write_only': True, 'required': False},
             'email': {'required': False},

@@ -44,6 +44,8 @@ class Command(BaseCommand):
                 temperature=temperature,
                 heart_rate=heart_rate,
                 spo2=spo2,
+                systolic_bp=systolicBP,
+                diastolic_bp=diastolicBP,
             )
             print(f"Sensor data saved for patient {patient.username}")
         except Patient.DoesNotExist:

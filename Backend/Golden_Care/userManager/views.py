@@ -11,7 +11,7 @@ from .serializers import (
 )
 from rest_framework.authentication import TokenAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from .permissions import CustomUserPermission
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -49,7 +49,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     Users can view their own information.
     """
     authentication_classes = [JWTAuthentication]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     http_method_names = ['get', 'head', 'options']
@@ -59,11 +59,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         Returns the CustomUser object of the currently authenticated user.
         """
         return CustomUser.objects.get(id=self.request.user.id)
-    def get_queryset(self):
-        """
-        Filters the CustomUser queryset to the currently authenticated user.
-        """
-        return CustomUser.objects.filter(id=self.request.user.id)
+
 
 class PatientViewSet(viewsets.ModelViewSet):
     """
@@ -72,22 +68,41 @@ class PatientViewSet(viewsets.ModelViewSet):
     Provides methods to retrieve and update Patient user details.
     """
     authentication_classes = [JWTAuthentication]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
     http_method_names = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options']  # Include PATCH method
 
     def get_queryset(self):
         """
-        Filters the Patient queryset to the currently authenticated user.
+        Filters the Patient queryset based on the user type.
+        If the user is a provider, return all patient objects.
+        Otherwise, return only the currently authenticated patient's object.
         """
-        return Patient.objects.filter(id=self.request.user.id)
+        user = self.request.user
+
+        if user.user_type == 'provider':
+            # If the user is a provider, return all patients
+            return Patient.objects.all()
+        else:
+            # If the user is a patient, return only their own data
+            return Patient.objects.filter(id=user.id)
+
 
     def get_object(self):
         """
         Returns the Patient object of the currently authenticated user.
+        If the user is a provider, an exception is raised.
         """
-        return Patient.objects.get(id=self.request.user.id)
+        user = self.request.user
+
+        if user.user_type == 'provider':
+            # Optionally, you could raise an error or return something specific for providers
+            raise ValidationError("Providers cannot retrieve a specific patient's object.")
+        else:
+            # Return the currently authenticated patient's object
+            return Patient.objects.get(id=user.id)
+
 
 
     def update(self, request, *args, **kwargs):
@@ -226,7 +241,7 @@ class IsOwner(permissions.BasePermission):
     """
     def has_object_permission(self, request, view, obj):
         # Ensure the authenticated user is an Patient
-        if request.user.user_type != 'Patient':
+        if request.user.user_type != 'patient':
             return False
 
         # Compare the IDs of the Patient and the authenticated user
@@ -258,7 +273,7 @@ class EmergencyContactViewSet(viewsets.ModelViewSet):
         user = self.request.user
 
         # Check if the user is of type 'Patient' using the user_type field
-        if user.user_type == 'Patient':
+        if user.user_type == 'patient':
             try:
                 # Cast the user to the Patient model
                 Patient_user = Patient.objects.get(pk=user.pk)

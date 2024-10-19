@@ -1,30 +1,45 @@
 from django.contrib import admin
-from .models import SensorData, Appointment
+from .models import Appointment, SensorData, Alert
+
+@admin.register(Appointment)
+class AppointmentAdmin(admin.ModelAdmin):
+    """
+    Admin interface for managing Appointments between patients and providers.
+    """
+    list_display = ['appointment_id', 'patient', 'provider', 'appointment_date', 'status']
+    list_filter = ['status', 'appointment_date', 'provider']
+    search_fields = ['patient__username', 'provider__Provider_name']
+    readonly_fields = ['created_at', 'updated_at']
+    ordering = ['-appointment_date']
+
+    def provider(self, obj):
+        return obj.provider.Provider_name
 
 
 @admin.register(SensorData)
 class SensorDataAdmin(admin.ModelAdmin):
     """
-    Admin panel configuration for managing SensorData.
+    Admin interface for managing SensorData from patients.
     """
-    list_display = ['patient', 'temperature', 'humidity', 'heart_rate', 'spo2', 'systolic_bp', 'diastolic_bp', 'timestamp']
-    list_filter = ['patient', 'timestamp']
-    search_fields = ['patient__username', 'patient__email']
+    list_display = ['patient', 'temperature', 'heart_rate', 'spo2','systolic_bp','diastolic_bp', 'timestamp']
+    list_filter = ['timestamp', 'patient']
+    search_fields = ['patient__username']
+    readonly_fields = ['timestamp']
 
 
-@admin.register(Appointment)
-class AppointmentAdmin(admin.ModelAdmin):
+@admin.register(Alert)
+class AlertAdmin(admin.ModelAdmin):
     """
-    Admin panel configuration for managing Appointments.
+    Admin interface for managing Alerts triggered from sensor data.
     """
-    list_display = ['appointment_id', 'patient', 'provider', 'appointment_date', 'status']
-    list_filter = ['provider', 'status', 'appointment_date']
-    search_fields = ['patient__username', 'provider__Provider_name', 'reason_for_appointment']
-    readonly_fields = ['created_at', 'updated_at']
-    ordering = ['-appointment_date']
+    list_display = ['patient', 'alert_type', 'description', 'is_active', 'created_at', 'resolved_at']
+    list_filter = ['alert_type', 'is_active', 'created_at']
+    search_fields = ['patient__username']
+    readonly_fields = ['created_at', 'resolved_at']
+    actions = ['resolve_alerts']
 
-    def provider(self, obj):
-        """
-        Display the provider name in the admin panel.
-        """
-        return obj.provider.Provider_name
+    def resolve_alerts(self, request, queryset):
+        for alert in queryset:
+            alert.resolve_alert()
+        self.message_user(request, f"{queryset.count()} alerts were resolved.")
+    resolve_alerts.short_description = "Resolve selected alerts"
