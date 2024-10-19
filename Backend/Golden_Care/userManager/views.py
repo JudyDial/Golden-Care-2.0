@@ -11,7 +11,7 @@ from .serializers import (
 )
 from rest_framework.authentication import TokenAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from .permissions import CustomUserPermission
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -49,7 +49,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     Users can view their own information.
     """
     authentication_classes = [JWTAuthentication]
-    permission_classes = [CustomUserPermission]
+    permission_classes = [AllowAny]
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     http_method_names = ['get', 'head', 'options']
@@ -59,7 +59,11 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         Returns the CustomUser object of the currently authenticated user.
         """
         return CustomUser.objects.get(id=self.request.user.id)
-
+    def get_queryset(self):
+        """
+        Filters the CustomUser queryset to the currently authenticated user.
+        """
+        return CustomUser.objects.filter(id=self.request.user.id)
 
 class PatientViewSet(viewsets.ModelViewSet):
     """
@@ -68,7 +72,7 @@ class PatientViewSet(viewsets.ModelViewSet):
     Provides methods to retrieve and update Patient user details.
     """
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
     http_method_names = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options']  # Include PATCH method

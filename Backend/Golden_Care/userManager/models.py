@@ -134,6 +134,7 @@ class Patient(CustomUser):
     location = models.CharField(max_length=50, default="N/A")
     latitude = models.FloatField(blank=True, null=True, verbose_name="Latitude")
     longitude = models.FloatField(blank=True, null=True, verbose_name="Longitude")
+    
     class Meta:
         verbose_name = "Patient"
         verbose_name_plural = "Patients"

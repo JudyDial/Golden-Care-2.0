@@ -61,29 +61,28 @@ class Appointment(models.Model):
         self.status = 'completed'
         self.save()
 
+
 class SensorData(models.Model):
     """
     Model to store sensor data received from patients.
     Attributes:
         patient (ForeignKey): Reference to the Patient model.
         temperature (FloatField): Patient's temperature data.
+        humidity (FloatField): Patient's humidity data.
         heart_rate (FloatField): Patient's heart rate data.
         spo2 (FloatField): Patient's blood oxygen level (SpO2).
-        accel_x, accel_y, accel_z (FloatField): Accelerometer readings.
-        gyro_x, gyro_y, gyro_z (FloatField): Gyroscope readings.
+        systolic_bp (FloatField): Estimated systolic blood pressure.
+        diastolic_bp (FloatField): Estimated diastolic blood pressure.
         timestamp (DateTimeField): Time when the data was received.
     """
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='sensor_data')
     temperature = models.FloatField(null=True, blank=True)
+    humidity = models.FloatField(null=True, blank=True)  # Added humidity data
     heart_rate = models.FloatField(null=True, blank=True)
     spo2 = models.FloatField(null=True, blank=True)
-    accel_x = models.FloatField(null=True, blank=True)
-    accel_y = models.FloatField(null=True, blank=True)
-    accel_z = models.FloatField(null=True, blank=True)
-    gyro_x = models.FloatField(null=True, blank=True)
-    gyro_y = models.FloatField(null=True, blank=True)
-    gyro_z = models.FloatField(null=True, blank=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    systolic_bp = models.FloatField(null=True, blank=True)  # Added systolic BP
+    diastolic_bp = models.FloatField(null=True, blank=True)  # Added diastolic BP
+    timestamp = models.DateTimeField(default=timezone.now)  # Timestamp of data
 
     def __str__(self):
-        return f"Sensor Data for {self.patient} at {self.timestamp}"
+        return f"Sensor Data for {self.patient.name} at {self.timestamp}"

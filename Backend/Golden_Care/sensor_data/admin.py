@@ -1,12 +1,13 @@
 from django.contrib import admin
 from .models import SensorData, Appointment
 
+
 @admin.register(SensorData)
 class SensorDataAdmin(admin.ModelAdmin):
     """
     Admin panel configuration for managing SensorData.
     """
-    list_display = ['patient', 'temperature', 'heart_rate', 'spo2', 'timestamp']
+    list_display = ['patient', 'temperature', 'humidity', 'heart_rate', 'spo2', 'systolic_bp', 'diastolic_bp', 'timestamp']
     list_filter = ['patient', 'timestamp']
     search_fields = ['patient__username', 'patient__email']
 
@@ -27,8 +28,3 @@ class AppointmentAdmin(admin.ModelAdmin):
         Display the provider name in the admin panel.
         """
         return obj.provider.Provider_name
-
-
-# Register other related models
-# admin.site.register(Patient)
-# admin.site.register(Provider)

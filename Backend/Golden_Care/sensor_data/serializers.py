@@ -20,9 +20,8 @@ class SensorDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SensorData
-        fields = ['id', 'patient', 'temperature', 'heart_rate', 'spo2', 
-                  'accel_x', 'accel_y', 'accel_z', 
-                  'gyro_x', 'gyro_y', 'gyro_z', 'timestamp']
+        fields = ['id', 'patient', 'temperature', 'humidity', 'heart_rate', 'spo2',
+                  'systolic_bp', 'diastolic_bp', 'timestamp']
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
@@ -34,4 +33,5 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Appointment
-        fields = ['appointment_id', 'patient', 'provider_name', 'appointment_date', 'status', 'reason_for_appointment', 'created_at', 'updated_at']
+        fields = ['appointment_id', 'patient', 'provider_name', 'appointment_date', 'status', 'reason_for_appointment',
+                  'created_at', 'updated_at']

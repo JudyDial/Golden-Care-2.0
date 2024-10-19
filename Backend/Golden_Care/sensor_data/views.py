@@ -54,7 +54,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(patient__id=patient_id)
         if provider_id is not None:
             queryset = queryset.filter(provider__id=provider_id)
-        
+
         return queryset
 
     @action(detail=False, methods=['get'])

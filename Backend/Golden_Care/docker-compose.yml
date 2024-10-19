@@ -25,7 +25,7 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_DB: gc_db
-      POSTGRES_USER: gc_user
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root_password
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -44,9 +44,11 @@ services:
       - postgres  # Fixed db to postgres
       - redis
     command: >
-      sh -c "python manage.py makemigrations && python manage.py migrate &&
-             python manage.py collectstatic --noinput &&  python manage.py mqtt_subscribe &&
-             daphne -b 0.0.0.0 -p 8000 Golden_Care.asgi:application "
+      sh -c "python manage.py makemigrations || echo 'makemigrations failed'; 
+            python manage.py migrate || echo 'migrate failed'; 
+            python manage.py collectstatic --noinput || echo 'collectstatic failed';  
+            python manage.py mqtt_subscribe & 
+            daphne -b 0.0.0.0 -p 8000 Golden_Care.asgi:application"
     networks:
       - backend-network
 

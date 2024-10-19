@@ -58,7 +58,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         last_name = request.data.get('last_name', '')
         Provider_name = request.data.get('Provider_name', '')
         location = request.data.get('location', '')
-        level = request.data.get('level', '')
+        status = request.data.get('status', '')
         address = request.data.get('address', '')
 
         # Validate email before saving
@@ -88,7 +88,7 @@ class CustomRegisterSerializer(RegisterSerializer):
                     address=address,
                     verified=False,
                     location=location,
-                    level=level,
+                    status=status,
                 )
             elif user_type == 'admin':
                 user = Admin.objects.create(
@@ -233,7 +233,7 @@ class ProviderSummarySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Provider
-        fields = ['id', 'username', 'email', 'Provider_name', 'location', 'verified', 'level',  'address', 'image', 'status']
+        fields = ['id', 'username', 'email', 'Provider_name', 'location', 'verified', 'status',  'address', 'image', 'status']
 
 
 class AdminSummarySerializer(serializers.ModelSerializer):
