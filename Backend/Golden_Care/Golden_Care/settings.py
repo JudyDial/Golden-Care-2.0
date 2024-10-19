@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     
     # My apps
     'userManager',
+    'sensor_data',
 ]
 
 MIDDLEWARE = [

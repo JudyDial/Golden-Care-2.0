@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from sensor_data.models import SensorData
 from userManager.models import Patient
 
-MQTT_BROKER = 'YOUR_MQTT_BROKER_IP'
+MQTT_BROKER = '172.16.105.74'
 MQTT_PORT = 1883
 MQTT_TOPIC = 'sensor/data'
 
@@ -32,12 +32,8 @@ class Command(BaseCommand):
         temperature = data.get('temperature')
         heart_rate = data.get('heart_rate')
         spo2 = data.get('spo2')
-        accel_x = data.get('accel_x')
-        accel_y = data.get('accel_y')
-        accel_z = data.get('accel_z')
-        gyro_x = data.get('gyro_x')
-        gyro_y = data.get('gyro_y')
-        gyro_z = data.get('gyro_z')
+        systolicBP = data.get('systolicBP')
+        diastolicBP = data.get('diastolicBP')
 
         try:
             # Find the patient by user ID
@@ -48,12 +44,6 @@ class Command(BaseCommand):
                 temperature=temperature,
                 heart_rate=heart_rate,
                 spo2=spo2,
-                accel_x=accel_x,
-                accel_y=accel_y,
-                accel_z=accel_z,
-                gyro_x=gyro_x,
-                gyro_y=gyro_y,
-                gyro_z=gyro_z
             )
             print(f"Sensor data saved for patient {patient.username}")
         except Patient.DoesNotExist:

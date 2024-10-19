@@ -1,9 +1,6 @@
 from django.contrib import admin
 from .models import SensorData, Appointment
 
-# Import Patient and Provider from userManager models
-from userManager.models import Patient, Provider
-
 @admin.register(SensorData)
 class SensorDataAdmin(admin.ModelAdmin):
     """
@@ -33,5 +30,5 @@ class AppointmentAdmin(admin.ModelAdmin):
 
 
 # Register other related models
-admin.site.register(Patient)
-admin.site.register(Provider)
+# admin.site.register(Patient)
+# admin.site.register(Provider)

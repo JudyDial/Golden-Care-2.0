@@ -1,5 +1,5 @@
-cube(`user_manager_patient`, {
-  sql_table: `public."userManager_patient"`,
+cube(`sensor_data_sensordata`, {
+  sql_table: `public.sensor_data_sensordata`,
   
   data_source: `default`,
   
@@ -8,23 +8,19 @@ cube(`user_manager_patient`, {
   },
   
   dimensions: {
-    customuser_ptr_id: {
-      sql: `customuser_ptr_id`,
+    id: {
+      sql: `id`,
+      type: `number`,
+      primary_key: true
+    },
+    
+    patient_id: {
+      sql: `patient_id`,
       type: `string`
     },
     
-    gender: {
-      sql: `gender`,
-      type: `string`
-    },
-    
-    location: {
-      sql: `location`,
-      type: `string`
-    },
-    
-    date_of_birth: {
-      sql: `date_of_birth`,
+    timestamp: {
+      sql: `timestamp`,
       type: `time`
     }
   },
