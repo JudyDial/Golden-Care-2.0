@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from sensor_data.models import SensorData
 from userManager.models import Patient
 
-MQTT_BROKER = '172.16.105.74'
+MQTT_BROKER = '192.168.89.200'
 MQTT_PORT = 1883
 MQTT_TOPIC = 'sensor/data'
 
