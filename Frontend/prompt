@@ -67,3 +67,95 @@ Technical Notes:
 Use Next.js for server-side rendering and SEO optimization.
 Set up reusable and modular components for scalability.
 Ensure integration points for APIs or backends for real-time data (e.g., WebSockets for live vitals).
+
+
+
+I need a Next.js-based user interface for the health provider's side of the SilverWatch remote health monitoring system. The system should have the following features, and it should use green as the primary color for consistency with the patient-side UI.
+
+General Requirements:
+Responsive design for desktop, tablet, and mobile views.
+Tailwind CSS for styling to ensure maintainability and scalability.
+Easy navigation between various sections with a clear layout.
+Health Provider Dashboard Features:
+Patient Overview:
+
+A dashboard that lists all registered patients with basic information (e.g., name, age, recent vitals).
+Provide quick access to each patient's detailed health data and real-time vitals.
+Ability to search and filter patients by name, health conditions, or status (e.g., active, critical).
+Real-Time Vitals Monitoring:
+
+Display a live feed of patient vitals (e.g., heart rate, blood pressure, oxygen levels).
+Alerts for patients whose vitals are outside of normal ranges, allowing providers to prioritize attention.
+Provide graphs and historical data for each vital to track trends over time.
+Patient Health Records:
+
+Access detailed health records for each patient, including past vitals, medical history, medications, and appointments.
+Add/Update medical records: Enable providers to add notes or update medical history.
+Upload/Manage documents: Allow for uploading lab results, prescriptions, or other medical documents.
+Appointment Management:
+
+View and manage upcoming appointments.
+Schedule, reschedule, or cancel appointments with patients.
+Notifications for upcoming appointments or missed appointments.
+Medication Management:
+
+View and manage patient prescriptions.
+Track medication adherence and send reminders to patients who are non-compliant.
+Ability to prescribe new medications directly through the interface.
+Secure Messaging and Communication:
+
+A secure messaging system to communicate directly with patients.
+Option to send updates, reminders, or respond to patient queries.
+Support for group messaging (e.g., for multiple caregivers managing a patient).
+Patient Alerts and Notifications:
+
+A dedicated section to view alerts for patients with critical health conditions (e.g., abnormal vitals, missed medication).
+Customizable thresholds for vital signs to trigger notifications.
+Activity Monitoring and Reports:
+
+View activity data (e.g., steps, exercise) from patients' wearables.
+Analyze activity data in the context of the patient’s health status and provide feedback.
+Patient Health Insights:
+
+Generate health reports that summarize patient data (e.g., vital trends, medication adherence).
+Option to export reports in PDF or other formats for offline use or sharing with other healthcare professionals.
+Patient Goal Tracking:
+
+View patient progress towards health goals (e.g., weight loss, blood pressure reduction).
+Set or adjust new health goals for patients based on their current data.
+Mental Health Monitoring:
+
+Track patient-reported mental health data (e.g., mood tracking) and access mental health resources.
+Ability to suggest or refer patients to mental health professionals based on tracked data.
+Emergency Alerts and Contacts:
+
+A quick-access section to view emergency contact information for patients in case of critical events.
+Trigger emergency notifications to patients or family members if required.
+Data Analytics and Trends:
+
+Provide advanced analytics and trends for individual patients or the entire patient pool.
+Visualize large datasets using graphs and charts for better decision-making.
+Multi-Patient View and Bulk Actions:
+
+Ability to view and monitor multiple patients simultaneously in a summary view.
+Perform bulk actions (e.g., send a reminder to all patients or update multiple records at once).
+Patient Customization:
+
+Providers can customize the view or dashboard according to their needs (e.g., focus on specific patient data or vitals).
+Patient Referral System:
+
+Allow providers to refer patients to specialists or other departments.
+Manage referrals and track patient follow-ups.
+Multi-Language Support:
+
+Ensure the UI supports multiple languages for a diverse range of providers.
+Access Control and Security:
+
+Implement role-based access control for different healthcare staff members (e.g., doctors, nurses, administrators).
+Secure login with multi-factor authentication (MFA).
+Technical Notes:
+Use Next.js for server-side rendering and SEO optimization.
+Build reusable components for scalability.
+Ensure integration with patient-side APIs for real-time data fetching.
+WebSockets for real-time monitoring of vitals and alerts.
+Ensure compliance with healthcare data privacy regulations (e.g., HIPAA, GDPR).
