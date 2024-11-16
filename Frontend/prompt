@@ -1,0 +1,69 @@
+I need a Next.js-based user interface for a remote health monitoring system called SilverWatch. The system should have the following features:
+
+General Requirements:
+Use green as the primary color throughout the UI for consistency and branding.
+Implement a responsive design to ensure usability across desktop, tablet, and mobile devices.
+Integrate Tailwind CSS for styling to ensure maintainability and efficiency.
+Landing Page (Website):
+A visually appealing landing page to introduce the SilverWatch platform.
+Sections to include:
+Hero banner with a call-to-action (e.g., "Monitor Your Health in Real-Time").
+Overview of the platform's features.
+Testimonials section for user reviews.
+FAQ section for common questions.
+Contact form and links to download mobile apps (if applicable).
+Patient Dashboard Features:
+Vitals Monitoring:
+
+Display real-time and historical vitals like heart rate, blood pressure, and oxygen levels.
+Provide trend graphs and summaries for each vital.
+Alerts and Notifications:
+
+Show notifications for critical vitals or reminders (e.g., medications, appointments).
+Symptom Tracker:
+
+Simple UI for patients to log symptoms and view their history.
+Appointment Scheduling:
+
+Allow users to view, book, and manage appointments with their caregivers.
+Medication Management:
+
+Display a list of prescribed medications with dosage instructions.
+A tracker for medication adherence.
+Educational Resources:
+
+A section for articles, videos, or guides related to health conditions.
+Activity Dashboard:
+
+Display activity data such as step count and activity levels (integration with wearables if possible).
+Secure Messaging:
+
+A feature for direct communication between patients and their caregivers/providers.
+Emergency Contacts:
+
+A dedicated section with emergency contact information.
+Health Analytics and Trends:
+
+Graphs and charts for vitals trends over time (e.g., weekly/monthly views).
+Health Goals and Progress:
+
+A section for patients to set and track health-related goals like weight or blood pressure targets.
+Wearable Integration:
+
+Support for wearables to sync additional health data (e.g., Fitbit, Apple Watch).
+Mental Health Check-Ins:
+
+A simple mood tracker or access to mental health resources.
+Health Reports Export:
+
+A feature to download or share detailed health reports in PDF or other formats.
+Accessibility Features:
+
+Include options for accessibility, such as text-to-speech, high-contrast modes, and adjustable font sizes.
+Multi-Language Support:
+
+Implement multi-language options for inclusivity.
+Technical Notes:
+Use Next.js for server-side rendering and SEO optimization.
+Set up reusable and modular components for scalability.
+Ensure integration points for APIs or backends for real-time data (e.g., WebSockets for live vitals).
