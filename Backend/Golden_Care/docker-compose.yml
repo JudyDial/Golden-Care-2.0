@@ -1,4 +1,24 @@
-version: '3.8'
+# This is a Docker Compose file that defines the services and their
+# configurations for the GoldenCare project.
+
+# The services include:
+#   - cube: a Cube.js service for analytics and data visualization
+#   - postgres: a PostgreSQL database for storing data
+#   - django: a Django web application for managing data
+#   - nginx: a web server for serving static files and reverse proxying the
+#     Django application
+#   - redis: a Redis database for storing session data and caching
+#   - ftp: an FTP server for transferring files
+#   - emqx: an MQTT broker for IoT devices
+
+# The volumes mount the following directories:
+#   - ./nginx: configurations for the Nginx web server
+#   - ./static: static files for the Django application
+#   - ./media: media files for the Django application
+#   - ./logs: logs for the Django application
+#   - ./emqx_data: data for the EMQX MQTT broker
+#   - ./emqx_log: logs for the EMQX MQTT broker
+
 services:
   cube:
     image: cubejs/cube:latest
@@ -6,12 +26,15 @@ services:
       - "4000:4000"
       - "15432:15432"
     environment:
+      - CUBEJS_DB_TYPE=postgres
       - CUBEJS_DEV_MODE=true
-      # - CUBEJS_DB_HOST=postgres
-      # - CUBEJS_DB_NAME=gc_db
-      # - CUBEJS_DB_USER=postgres
-      # - CUBEJS_DB_PASS=root_password
-      # - CUBEJS_DB_PORT=5432
+      - RUST_BACKTRACE=full
+      - CUBEJS_API_SECRET=your-secret-key  # Replace with a strong, unique key
+      - CUBEJS_DB_HOST=postgres
+      - CUBEJS_DB_NAME=gc_db
+      - CUBEJS_DB_USER=postgres
+      - CUBEJS_DB_PASS=root_password
+      - CUBEJS_DB_PORT=5432
     volumes:
       - .:/cube/conf
     depends_on:
@@ -41,12 +64,13 @@ services:
       - static_volume:/app/static  # Mount volume for static files
       - media_volume:/app/media    # Mount volume for media files
     depends_on:
-      - postgres  # Fixed db to postgres
+      - postgres  
       - redis
+      - emqx
     command: >
-      sh -c "python manage.py makemigrations || echo 'makemigrations failed'; 
-            python manage.py migrate || echo 'migrate failed'; 
-            python manage.py collectstatic --noinput || echo 'collectstatic failed';  
+      sh -c "python manage.py makemigrations | tee -a /app/logs/output.log || echo 'makemigrations failed' | tee -a /app/logs/output.log; 
+            python manage.py migrate | tee -a /app/logs/output.log || echo 'migrate failed' | tee -a /app/logs/output.log; 
+            python manage.py collectstatic --noinput | tee -a /app/logs/output.log || echo 'collectstatic failed' | tee -a /app/logs/output.log;  
             python manage.py mqtt_subscribe & 
             daphne -b 0.0.0.0 -p 8000 Golden_Care.asgi:application"
     networks:
@@ -92,10 +116,30 @@ services:
     networks:
       - backend-network
 
+  emqx:
+    image: emqx:latest
+    environment:
+      - EMQX_LISTENERS__TCP__DEFAULT__BIND=1883
+      - EMQX_ADMIN_PASSWORD=admin  # Set admin password
+      - EMQX_ADMIN_USER=admin      # Set admin username
+      - EMQX_LOADED_MODULES=emqx_management,emqx_dashboard
+    ports:
+      - "18083:18083"  # Management Dashboard
+      - "1883:1883"    # MQTT Broker
+      - "8080:8080"    # HTTP API
+    volumes:
+      - emqx_data:/opt/emqx/data    # Persistent data
+      - emqx_log:/opt/emqx/log      # Persistent logs
+    networks:
+      - backend-network
+
 volumes:
   postgres_data:
   static_volume:
   media_volume:
+  emqx_data:
+  emqx_log:
 
 networks:
   backend-network:
+
