@@ -44,21 +44,69 @@ def email_confirmation_done(request):
 class CustomUserViewSet(viewsets.ModelViewSet):
     """
     API viewset for viewing and editing CustomUser instances.
-    
-    Provides GET, HEAD, and OPTIONS methods.
-    Users can view their own information.
+
+    Supports filtering by role using a query parameter (`role=all`, `role=subscribers`, `role=admins`).
+    Only admins can retrieve all users or by specific roles.
+    Only the authenticated user or an admin can edit or delete a user.
     """
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    http_method_names = ['get', 'head', 'options']
+    http_method_names = ['get', 'head', 'options', 'delete', 'patch']
 
+    def get_queryset(self):
+        """
+        Returns the queryset based on the role specified in the query parameter.
+        Only admins can access filtered roles.
+        """
+        role = self.request.query_params.get('role', 'self')  # Default to 'self' if no role is specified
+
+        if self.request.user.is_staff:
+            if role == 'all':
+                return self.queryset  # Return all users
+            elif role == 'patient':
+                return self.queryset.filter(user_type='patient')
+            elif role == 'admins':
+                return self.queryset.filter(is_staff=True)
+            else:
+                return self.queryset.filter(id=self.request.user.id)  # Return only the current user if role is 'self'
+        else:
+            # Non-admins can only access their own data
+            return self.queryset.filter(id=self.request.user.id)
+
+    def update(self, request, *args, **kwargs):
+        """
+        Allow update only if the request is made by the user themselves or an admin.
+        """
+        user = self.get_object()
+        if request.user == user or request.user.is_staff:
+            return super().update(request, *args, **kwargs)
+        else:
+            return Response({"detail": "Not authorized to update this user."}, status=status.HTTP_403_FORBIDDEN)
+
+    def destroy(self, request, *args, **kwargs):
+        """
+        Allow deletion only if the request is made by the user themselves or an admin.
+        """
+        user = self.get_object()
+        if request.user == user or request.user.is_staff:
+            return super().destroy(request, *args, **kwargs)
+        else:
+            return Response({"detail": "Not authorized to delete this user."}, status=status.HTTP_403_FORBIDDEN)
     def get_object(self):
         """
-        Returns the CustomUser object of the currently authenticated user.
+        Returns the CustomUser object if the request is from an admin or the current user.
+        Restricts access to the user's own data for non-admin users.
         """
-        return CustomUser.objects.get(id=self.request.user.id)
+        obj = super().get_object()
+        
+        # Allow access if the requesting user is the object owner or an admin
+        if self.request.user == obj or self.request.user.is_staff:
+            return obj
+        else:
+            raise PermissionDenied("You do not have permission to access this user.")
+
 
 
 class PatientViewSet(viewsets.ModelViewSet):

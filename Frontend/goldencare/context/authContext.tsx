@@ -63,11 +63,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Watch for changes in the `user` state
     if (user) {
       // After the user state is updated, perform redirection based on user type
-      if (user.user_type === "subscriber") {
-        router.push('/subscriber');
+      if (user.user_type === "provider") {
+        router.push('/provider/Dashboard');
       } else if (user.user_type === "admin") {
-        router.push('/admin');
+        router.push('/admin/Dashboard');
+      } else if (user.user_type === "patient") {
+        router.push('/user/Dashboard');
       }
+
     }
   }, [user]); // This effect runs whenever `user` changes
 

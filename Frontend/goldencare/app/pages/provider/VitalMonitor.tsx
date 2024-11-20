@@ -10,18 +10,24 @@ export default function VitalMonitor() {
   ]
 
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Real-Time Vital Monitoring</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <h2 className="text-2xl font-bold text-blue-700 mb-6">Real-Time Vital Monitoring</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {vitals.map(vital => (
-          <Card key={vital.id}>
-            <CardHeader>
-              <CardTitle>{vital.name}</CardTitle>
+          <Card key={vital.id} className="bg-white shadow-lg rounded-lg border border-gray-200 hover:shadow-xl transition-shadow duration-200">
+            <CardHeader className="bg-blue-600 text-white p-4 rounded-t-lg">
+              <CardTitle className="text-lg font-semibold">{vital.name}</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p><strong>Heart Rate:</strong> {vital.heartRate} bpm</p>
-              <p><strong>Blood Pressure:</strong> {vital.bp}</p>
-              <p><strong>Last Updated:</strong> {vital.lastUpdated}</p>
+            <CardContent className="p-4">
+              <p className="text-gray-700 mb-2">
+                <strong className="text-blue-600">Heart Rate:</strong> {vital.heartRate} bpm
+              </p>
+              <p className="text-gray-700 mb-2">
+                <strong className="text-blue-600">Blood Pressure:</strong> {vital.bp}
+              </p>
+              <p className="text-gray-700">
+                <strong className="text-blue-600">Last Updated:</strong> {vital.lastUpdated}
+              </p>
             </CardContent>
           </Card>
         ))}

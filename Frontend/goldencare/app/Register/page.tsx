@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Heart } from 'lucide-react'
-// import { useAuth } from '@/context/authContext' // Import useAuth from your context
-
+import { RadioGroup,RadioGroupItem } from '@/components/ui/radio-group'
+import { useAuth } from '@/context/authContext' // Import useAuth from your context
+ 
 export default function SignUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -16,7 +17,7 @@ export default function SignUp() {
   const [userType, setUserType] = useState('subscriber') // Add userType to handle the type of user (if needed)
   const router = useRouter()
 
-//   const { signUp, loading } = useAuth() // Destructure signUp and loading from the context
+  const { signUp, loading } = useAuth() // Destructure signUp and loading from the context
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,12 +27,12 @@ export default function SignUp() {
       return
     }
 
-    // try {
-    //   await signUp(email, password, password2, userType) // Call signUp from context
-    //   router.push('/login') // Redirect after successful signup
-    // } catch (error) {
-    //   console.error('Sign up failed:', error)
-    // }
+    try {
+      await signUp(email, password, password2, userType) // Call signUp from context
+      router.push('/login') // Redirect after successful signup
+    } catch (error) {
+      console.error('Sign up failed:', error)
+    }
   }
 
   return (
@@ -91,21 +92,19 @@ export default function SignUp() {
             </div>
 
             {/* Optionally, if you need userType */}
-            {/* <div>
+            <div>
               <Label htmlFor="user-type">User Type</Label>
               <RadioGroup selectedValue={userType} onChange={setUserType}>
-                <RadioGroupItem value="admin" label="Admin" />
+                <RadioGroupItem value="provider"  label="Provider" />
                 <RadioGroupItem value="user" label="User" />
               </RadioGroup>
-            </div> */}
+            </div>
 
             <div>
-              {/* <Button type="submit" className="w-full" disabled={loading}>
+              <Button type="submit" className="m-auto flex items-center" disabled={loading}>
                 {loading ? 'Signing Up...' : 'Sign up'}
-              </Button> */}
-              <Button type="submit" className="m-auto flex items-center" >
-                 Sign up
               </Button>
+
             </div>
           </form>
         </div>

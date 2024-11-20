@@ -12,10 +12,10 @@ import ActivityLogs from '@/app/pages/admin/activity-logs'
 import Reports from '@/app/pages/admin/reports'
 import Security from '@/app/pages/admin/security'
 import SettingsPage from '@/app/pages/admin/settings'
-
+import { useAuth } from '@/context/authContext'
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState('user-management')
-
+  const { logout } = useAuth();
   return (
     <SidebarProvider>
       <div className="w-full flex h-screen bg-gray-100">
@@ -84,7 +84,7 @@ export default function AdminDashboard() {
                   </SidebarTrigger>
                   <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
                 </div>
-                <Button variant="ghost" size="sm" className="text-gray-500 hover:text-gray-700">
+                <Button variant="ghost" size="sm" className="text-gray-500 hover:text-gray-700" onClick={logout}>
                   <LogOut className="h-5 w-5" />
                   <span className="ml-2">Logout</span>
                 </Button>

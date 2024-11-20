@@ -1,5 +1,6 @@
 import axios ,{AxiosError,AxiosResponse} from 'axios';
 import { 
+  // user management
   BASE_URL, 
   GET_INDIVIDUAL_URL,
   UPDATE_INDIVIDUAL_URL,
@@ -8,23 +9,6 @@ import {
   LOGIN_URL_URL, 
   LOGOUT_URL,
   GET_USER_URL,
-
-  // User app management
-  GET_APP_URL, 
-  GET_APPS_URL, 
-  CREATE_APP_URL, 
-  UPDATE_APP_URL,
-
-  // Detection app
-  GET_TRAFFIC_LOGS_URL, 
-  GET_TRAFFIC_LOGS_SUMMARY_URL,
-  RECENT_TRAFFIC_LOGS_URL,
-  GET_ANOMALY_LOGS_URL, 
-  GET_ANOMALY_LOGS_SUMMARY_URL,
-  RECENT_ANOMALY_LOGS_URL, 
-  RETRAIN_TRIGGER_URL, 
-  RETRAIN_TRIGGER_SUMMARY_URL,
-  TRIGGER_RETRAIN_URL,
   
 } from './apiConfig';
 
@@ -174,128 +158,3 @@ export const logoutUser = async () => {
 };
 
 
-// User app management
-// CREATE user app
-export const createUserApp = async (appData:any) => {
-  try {
-    const response = await api.post(CREATE_APP_URL, appData);
-    return response.data;
-  } catch (error) {
-    handleApiError(error as AxiosError);
-  }
-};
-
-// GET a single user app by ID
-export const getUserApp = async (id:string) => {
-  try {
-    const response = await api.get(GET_APP_URL.replace('{id}', id));
-    return response.data;
-  } catch (error) {
-    handleApiError(error as AxiosError);
-  }
-};
-
-// GET all user apps
-export const getUserApps = async () => {
-  try {
-    const response = await api.get(GET_APPS_URL);
-    return response.data;
-  } catch (error) {
-    handleApiError(error as AxiosError);
-  }
-};
-
-// UPDATE user app
-export const updateUserApp = async (id:string, appData:any) => {
-  try {
-    const response = await api.patch(UPDATE_APP_URL.replace('{id}', id), appData);
-    return response.data;
-  } catch (error) {
-    handleApiError(error as AxiosError);
-  }
-};
-
-// Traffic Logs
-
-export const getTrafficLogs = async (appId: string) => {
-  try {
-    const response = await api.get(`${GET_TRAFFIC_LOGS_URL}?app_id=${appId}`);
-    return response.data;
-  } catch (error) {
-    handleApiError(error as AxiosError);
-  }
-};
-
-export const getSummaryTrafficLogs = async (appId: string) => {
-  try {
-    const response = await api.get(`${GET_TRAFFIC_LOGS_SUMMARY_URL}?app_id=${appId}`);
-    return response.data;
-  } catch (error) {
-    handleApiError(error as AxiosError);
-  }
-};
-export const getRecentTrafficLogs = async (appId: string) => {
-  try {
-    const response = await api.get(`${RECENT_TRAFFIC_LOGS_URL}?app_id=${appId}`);
-    return response.data;
-  } catch (error) {
-    handleApiError(error as AxiosError);
-  }
-};
-
-// Anomaly Logs
-
-export const getAnomalyLogs = async (appId: string) => {
-  try {
-    const response = await api.get(`${GET_ANOMALY_LOGS_URL}?app_id=${appId}`);
-    return response.data;
-  } catch (error) {
-    handleApiError(error as AxiosError);
-  }
-};
-export const getSummaryAnomalyLogs = async (appId: string) => {
-  try {
-    const response = await api.get(`${GET_ANOMALY_LOGS_SUMMARY_URL}?app_id=${appId}`);
-    return response.data;
-  } catch (error) {
-    handleApiError(error as AxiosError);
-  }
-};
-
-export const getRecentAnomalyLogs = async (appId: string) => {
-  try {
-    const response = await api.get(`${RECENT_ANOMALY_LOGS_URL}?app_id=${appId}`);
-    return response.data;
-  } catch (error) {
-    handleApiError(error as AxiosError);
-  }
-};
-
-// Model Retrain Trigger
-
-export const getRetrainTriggers = async (appId: string) => {
-  try {
-    const response = await api.get(`${RETRAIN_TRIGGER_URL}?app_id=${appId}`);
-    return response.data;
-  } catch (error) {
-    handleApiError(error as AxiosError);
-  }
-};
-
-export const getRetrainTriggerSummary = async (appId: string) => {
-  try {
-    const response = await api.get(`${RETRAIN_TRIGGER_SUMMARY_URL}?app_id=${appId}`);
-    return response.data;
-  } catch (error) {
-    handleApiError(error as AxiosError);
-  }
-};
-
-export const triggerRetrainModel = async (appId: string) => {
-  try {
-    const response = await api.post(TRIGGER_RETRAIN_URL, { app_id: appId });
-    return response.data;
-  } catch (error) {
-    handleApiError(error as AxiosError);
-  }
-};

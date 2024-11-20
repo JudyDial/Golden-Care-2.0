@@ -5,8 +5,10 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { Users, ClipboardList, BarChart, Calendar, MessageSquare, LogOut, Shield, Menu } from 'lucide-react'
+import { Users, ClipboardList, BarChart, Calendar, MessageSquare, LogOut, Shield, Menu,Search  } from 'lucide-react'
+import { Input } from '@/components/ui/input'
 
+import Overview from '@/app/pages/provider/overview'
 import PatientList from '@/app/pages/provider/PatientList'
 import VitalMonitor from '@/app/pages/provider/VitalMonitor'
 import AppointmentSchedule from '@/app/pages/provider/AppointmentSchedule'
@@ -31,6 +33,11 @@ export default function ProviderDashboard() {
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
+                    <SidebarMenuButton onClick={() => setActiveSection('overview')} isActive={activeSection === 'overview'}>
+                      <ClipboardList className="mr-2 h-4 w-4" />
+                      <span>Overview</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem> <SidebarMenuItem>
                     <SidebarMenuButton onClick={() => setActiveSection('patient-list')} isActive={activeSection === 'patient-list'}>
                       <Users className="mr-2 h-4 w-4" />
                       <span>Patients</span>
@@ -61,6 +68,7 @@ export default function ProviderDashboard() {
         </Sidebar>
 
         <div className="w-full flex-1 flex flex-col overflow-hidden">
+          {/* To do Add search bar to header */}
           <header className="bg-white shadow-sm z-10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between items-center py-6">
@@ -70,21 +78,33 @@ export default function ProviderDashboard() {
                   </SidebarTrigger>
                   <h1 className="text-2xl font-bold text-gray-900">Provider Dashboard</h1>
                 </div>
+                <div className="flex items-center space-x-2">
+                  <Input
+                    type="search"
+                    placeholder="Search patients..."
+                    className="md:w-[300px]"
+                  />
+                  <Button>
+                    <Search className="mr-2 h-4 w-4" /> Search
+                  </Button>
+                </div>
                 <Button variant="ghost" size="sm" className="text-gray-500 hover:text-gray-700">
                   <LogOut className="h-5 w-5" />
                   <span className="ml-2">Logout</span>
                 </Button>
               </div>
             </div>
+            
           </header>
 
           <main className="flex-1 overflow-y-auto bg-gray-50 p-4 sm:p-6 lg:p-8">
-            {activeSection === 'patient-list' && <PatientList />}
-            {activeSection === 'vital-monitor' && <VitalMonitor />}
-            {activeSection === 'appointment-schedule' && <AppointmentSchedule />}
-            {activeSection === 'communication' && <Communication />}
+          {activeSection === 'overview' && <Overview />}
+          {activeSection === 'patient-list' && <PatientList />}
+          {activeSection === 'vital-monitor' && <VitalMonitor />}
+          {activeSection === 'appointment-schedule' && <AppointmentSchedule />}
+          {activeSection === 'communication' && <Communication />}
 
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle>Dashboard Summary</CardTitle>
@@ -107,7 +127,7 @@ export default function ProviderDashboard() {
                   </ul>
                 </CardContent>
               </Card>
-            </div>
+            </div> */}
           </main>
         </div>
       </div>

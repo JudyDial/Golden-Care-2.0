@@ -131,7 +131,8 @@ class SensorDataViewSet(viewsets.ModelViewSet):
             serializer.save(patient=patient)
 
         elif user.user_type == 'patient':
-            serializer.save(patient=user)
+            patient = Patient.objects.get(id=user.id)
+            serializer.save(patient=patient)
 
 
 # AlertViewSet

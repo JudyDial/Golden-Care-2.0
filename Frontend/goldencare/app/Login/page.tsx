@@ -8,22 +8,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Heart } from 'lucide-react';
-// import { useAuth } from '@/context/authContext';
+import { useAuth } from '@/context/authContext';
 
-export default function SignUp() {
+export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-//   const { login, loading } = useAuth(); // Destructure loading from useAuth
+  const { login, loading } = useAuth(); // Destructure loading from useAuth
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null); // Clear any previous error
-    // try {
-    //   await login(email, password); // Call login function from context
-    // } catch (err) {
-    //   setError('Invalid email or password. Please try again.');
-    //   console.error('Login error:', err);
-    // }
+    try {
+      await login(email, password); // Call login function from context
+    } catch (err) {
+      setError('Invalid email or password. Please try again.');
+      console.error('Login error:', err);
+    }
   };
 
   return (
@@ -71,11 +71,8 @@ export default function SignUp() {
             {error && <p className="text-red-600">{error}</p>}
 
             <div>
-              {/* <Button type="submit" className="w-full" disabled={loading}>
+              <Button variant={"default"} type="submit" className="m-auto flex items-center" disabled={loading}>
                 {loading ? 'Logging in...' : 'Login'}
-              </Button> */}
-              <Button variant={"default"} className="m-auto flex items-center" >
-                Login
               </Button>
             </div>
           </form>
