@@ -9,11 +9,12 @@ interface RadioGroupProps {
 export const RadioGroup: React.FC<RadioGroupProps> = ({ selectedValue, onChange, children }) => {
   return (
     <div className="flex flex-col space-y-2">
-      {React.Children.map(children, (child) =>
+      {React.Children.map(children, (child, index) =>
         React.isValidElement<RadioGroupItemProps>(child)
           ? React.cloneElement(child as React.ReactElement<RadioGroupItemProps>, {
               checked: selectedValue === child.props.value,
               onChange,
+              id: `radio-${index}`,  // Generate a unique ID for each RadioGroupItem
             })
           : child
       )}

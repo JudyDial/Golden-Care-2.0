@@ -3,10 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 export default function Reports() {
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="border-blue-600 bg-blue-50">
         <CardHeader>
-          <CardTitle>Reports</CardTitle>
-          <CardDescription>Review system and user activity reports.</CardDescription>
+          <CardTitle className="text-blue-600">Reports</CardTitle>
+          <CardDescription className="text-blue-500">Review system and user activity reports.</CardDescription>
         </CardHeader>
         <CardContent>
           <ul className="space-y-4">
@@ -29,10 +29,12 @@ function ReportItem({ title, date }: ReportItemProps) {
   return (
     <li className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
       <div>
-        <h4 className="font-semibold">{title}</h4>
+        <h4 className="font-semibold text-gray-900">{title}</h4>
         <p className="text-sm text-gray-500">{date}</p>
       </div>
-      <button className="text-sm text-blue-600 hover:underline">View</button>
+      <button className="text-sm text-blue-600 hover:underline">
+        View
+      </button>
     </li>
   )
 }

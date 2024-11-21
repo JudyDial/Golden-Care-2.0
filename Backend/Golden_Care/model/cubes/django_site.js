@@ -14,13 +14,13 @@ cube(`django_site`, {
       primary_key: true
     },
     
-    name: {
-      sql: `name`,
+    domain: {
+      sql: `domain`,
       type: `string`
     },
     
-    domain: {
-      sql: `domain`,
+    name: {
+      sql: `name`,
       type: `string`
     }
   },

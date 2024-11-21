@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { AuthProvider } from "@/context/authContext";
+import { AlertProvider } from "@/context/alertContext";
+import { AppointmentsProvider } from "@/context/appointmentsContext";
+import { SensorDataProvider } from "@/context/SensorDataContext";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -26,11 +29,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthProvider>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          {children}
-        </body>
+        <AlertProvider>
+          <AppointmentsProvider>
+            <SensorDataProvider>
+              <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+              >
+                {children}
+              </body>
+            </SensorDataProvider>
+          </AppointmentsProvider>
+        </AlertProvider>
       </AuthProvider>
     </html>
   );

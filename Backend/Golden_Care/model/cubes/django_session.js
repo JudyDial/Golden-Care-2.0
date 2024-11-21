@@ -8,13 +8,13 @@ cube(`django_session`, {
   },
   
   dimensions: {
-    session_data: {
-      sql: `session_data`,
+    session_key: {
+      sql: `session_key`,
       type: `string`
     },
     
-    session_key: {
-      sql: `session_key`,
+    session_data: {
+      sql: `session_data`,
       type: `string`
     },
     

@@ -1,5 +1,5 @@
-cube(`sensor_data_appointment`, {
-  sql_table: `public.sensor_data_appointment`,
+cube(`sensor_data_alert`, {
+  sql_table: `public.sensor_data_alert`,
   
   data_source: `default`,
   
@@ -8,28 +8,28 @@ cube(`sensor_data_appointment`, {
   },
   
   dimensions: {
-    reason_for_appointment: {
-      sql: `reason_for_appointment`,
-      type: `string`
-    },
-    
-    provider_id: {
-      sql: `provider_id`,
-      type: `string`
-    },
-    
     patient_id: {
       sql: `patient_id`,
       type: `string`
     },
     
-    status: {
-      sql: `status`,
+    description: {
+      sql: `description`,
       type: `string`
     },
     
-    appointment_id: {
-      sql: `appointment_id`,
+    alert_id: {
+      sql: `alert_id`,
+      type: `string`
+    },
+    
+    is_active: {
+      sql: `is_active`,
+      type: `boolean`
+    },
+    
+    alert_type: {
+      sql: `alert_type`,
       type: `string`
     },
     
@@ -38,13 +38,8 @@ cube(`sensor_data_appointment`, {
       type: `time`
     },
     
-    updated_at: {
-      sql: `updated_at`,
-      type: `time`
-    },
-    
-    appointment_date: {
-      sql: `appointment_date`,
+    resolved_at: {
+      sql: `resolved_at`,
       type: `time`
     }
   },

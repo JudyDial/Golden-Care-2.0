@@ -4,16 +4,16 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
-import { Heart, Activity, Calendar, Bell, BookOpen, MessageSquare, PhoneCall, Download, Hand } from 'lucide-react'
+import { Heart, Activity, Calendar, Bell, Download } from 'lucide-react'
 import { useRouter } from 'next/navigation';
-
+import { HealthCheckModal } from '@/components/modals/health-check-modal'
 export default function LandingPage() {
   const [name, setName] = useState('');
   const [email, setemail] = useState('');
   const [message, setmessage] = useState('');
   const router = useRouter()
 
-  const HandleSubmit = async (e: any) => {
+  const HandleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!name || !email || !message) {
@@ -46,7 +46,7 @@ export default function LandingPage() {
         <section className="bg-blue-500 text-white py-20">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-4xl font-bold mb-4">Monitor Your Health in Real-Time</h2>
-            <p className="text-xl mb-8">Stay connected to your health with SilverWatch's advanced remote monitoring system.</p>
+            <p className="text-xl mb-8">Stay connected to your health with SilverWatch&apos;s advanced remote monitoring system.</p>
             <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-100" onClick={() => { router.push('/Register') }}>Get Started</Button>
           </div>
         </section>
@@ -63,7 +63,23 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-
+        {/* Health Check modal */}
+        <section className="py-20 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-3xl font-bold mb-6">AI-Powered Health Risk Assessment</h2>
+              <p className="text-xl mb-8">
+                Utilize our state-of-the-art AI model to assess your risk of diabetes or hypertension. Get personalized insights based on your health data.
+              </p>
+              <div className="flex justify-center space-x-4">
+                <HealthCheckModal />
+                <Button variant="outline" className="bg-white text-blue-600 hover:bg-blue-100">
+                  Learn More
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
         {/* Testimonials */}
         <section id="testimonials" className="bg-blue-50 py-20">
           <div className="container mx-auto px-4">
@@ -71,7 +87,7 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <TestimonialCard name="John D." quote="SilverWatch has given me peace of mind knowing that my health is being monitored 24/7." />
               <TestimonialCard name="Sarah M." quote="The easy-to-use interface makes tracking my vitals and medications a breeze." />
-              <TestimonialCard name="Robert L." quote="I love how I can easily share my health data with my doctor. It's improved my care significantly." />
+              <TestimonialCard name="Robert L." quote="I love how I can easily share my health data with my doctor. It&APOS;s improved my care significantly." />
             </div>
           </div>
         </section>
@@ -84,7 +100,7 @@ export default function LandingPage() {
               <AccordionItem value="item-1">
                 <AccordionTrigger>How does SilverWatch work?</AccordionTrigger>
                 <AccordionContent>
-                  SilverWatch uses advanced sensors and wearable technology to monitor your vital signs and activity levels. This data is securely transmitted to our platform, where it's analyzed and presented in an easy-to-understand format.
+                  SilverWatch uses advanced sensors and wearable technology to monitor your vital signs and activity levels. This data is securely transmitted to our platform, where it&APOS;s analyzed and presented in an easy-to-understand format.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-2">
@@ -183,7 +199,7 @@ interface TestimonialCardProps {
 function TestimonialCard({ name, quote }: TestimonialCardProps) {
   return (
     <div className="border border-blue-200 p-6 rounded-lg shadow-sm hover:shadow-lg transition">
-      <p className="italic mb-4">"{quote}"</p>
+      <p className="italic mb-4">&quot;{quote}&quot;</p>
       <h4 className="text-lg font-semibold text-right">- {name}</h4>
     </div>
   );

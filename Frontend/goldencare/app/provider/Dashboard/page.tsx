@@ -1,11 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { Users, ClipboardList, BarChart, Calendar, MessageSquare, LogOut, Shield, Menu,Search  } from 'lucide-react'
+import { Users, ClipboardList, BarChart, Calendar,Heart, MessageSquare, LogOut, Menu,Search  } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 
 import Overview from '@/app/pages/provider/overview'
@@ -23,7 +21,7 @@ export default function ProviderDashboard() {
         <Sidebar className="hidden md:block">
           <SidebarHeader>
             <div className="flex items-center gap-2 px-4 py-2">
-              <Shield className="h-6 w-6 text-blue-600" />
+              <Heart className="h-6 w-6 text-blue-600" />
               <span className="text-xl font-bold text-blue-600">Provider Panel</span>
             </div>
           </SidebarHeader>

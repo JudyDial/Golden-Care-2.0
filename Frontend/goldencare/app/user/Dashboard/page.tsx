@@ -1,31 +1,42 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Heart, Activity, Calendar, Bell, Pill, BookOpen, MessageSquare, PhoneCall, Target, Brain, Home, Settings, LogOut, Menu } from 'lucide-react'
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Heart, Activity, Calendar, Pill, BookOpen, MessageSquare, PhoneCall, Target, Brain} from 'lucide-react'
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from '@/components/ui/sidebar'
 import Vitals from '../../pages/vitals'
 import Medications from '../../pages/medications'
 import Appointments from '../../pages/appointments'
 import ActivityPage from '../../pages/activity'
 import ResourcesPage from '../../pages/resources'
+import Communication from '@/app/pages/provider/Communication'
 
-// Mock data for demonstration purposes
-const vitalsData = [
-  { name: 'Mon', heartRate: 72, bloodPressure: 120, oxygenLevel: 98 },
-  { name: 'Tue', heartRate: 75, bloodPressure: 118, oxygenLevel: 97 },
-  { name: 'Wed', heartRate: 71, bloodPressure: 122, oxygenLevel: 98 },
-  { name: 'Thu', heartRate: 73, bloodPressure: 119, oxygenLevel: 99 },
-  { name: 'Fri', heartRate: 74, bloodPressure: 121, oxygenLevel: 98 },
-  { name: 'Sat', heartRate: 76, bloodPressure: 117, oxygenLevel: 97 },
-  { name: 'Sun', heartRate: 72, bloodPressure: 120, oxygenLevel: 98 },
-]
+// Emergency Contact Modal Component
+function EmergencyModal({ isOpen, onClose, message }: { isOpen: boolean, onClose: () => void, message: string }) {
+  if (!isOpen) return null
+
+  setTimeout(onClose, 5000) // Close modal after 5 seconds
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+        <h3 className="text-lg font-semibold">{message}</h3>
+        <p>This will connect you shortly.</p>
+      </div>
+    </div>
+  )
+}
 
 export default function Dashboard() {
   const [activeSection, setActiveSection] = useState('vitals')
+  const [isModalOpen, setModalOpen] = useState(false)
+  const [modalMessage, setModalMessage] = useState('')
+
+  const handleEmergencyCall = (message: string) => {
+    setModalMessage(message)
+    setModalOpen(true)
+  }
 
   return (
     <SidebarProvider>
@@ -33,8 +44,8 @@ export default function Dashboard() {
         <Sidebar className="hidden md:block">
           <SidebarHeader>
             <div className="flex items-center gap-2 px-4 py-2">
-              <Heart className="h-6 w-6 text-green-600" />
-              <span className="text-xl font-bold text-green-600">SilverWatch</span>
+              <Heart className="h-6 w-6 text-blue-700" />
+              <span className="text-xl font-bold text-blue-700">SilverWatch</span>
             </div>
           </SidebarHeader>
           <SidebarContent>
@@ -75,67 +86,17 @@ export default function Dashboard() {
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
-            <SidebarGroup>
-              <SidebarGroupLabel>Account</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/profile">
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>Settings</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <button className="w-full text-left">
-                        <LogOut className="mr-2 h-4 w-4" />
-                        <span>Logout</span>
-                      </button>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
           </SidebarContent>
         </Sidebar>
 
         <div className="w-full flex-1 flex flex-col overflow-hidden">
-          <header className="bg-white shadow-sm z-10 ">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-between items-center py-6 md:justify-start md:space-x-10">
-                <div className="flex justify-start lg:w-0 lg:flex-1">
-                  <SidebarTrigger className="md:hidden">
-                    <Menu className="h-6 w-6" />
-                  </SidebarTrigger>
-                  <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-                </div>
-                <nav className="hidden md:flex space-x-10">
-                  {/* Add any additional header items here */}
-                </nav>
-                <div className="flex items-center justify-end md:flex-1 lg:w-0">
-                  <Button variant="ghost" size="sm" className="text-gray-500 hover:text-gray-700">
-                    <Bell className="h-5 w-5" />
-                  </Button>
-                  <Button variant="ghost" size="sm" className="text-gray-500 hover:text-gray-700">
-                    <MessageSquare className="h-5 w-5" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </header>
-
           <main className="flex-1 overflow-y-auto bg-gray-50 p-4 sm:p-6 lg:p-8">
             {activeSection === 'vitals' && <Vitals />}
-
             {activeSection === 'medications' && <Medications />}
-
-            {activeSection === 'appointments' && <Appointments /> }
-
+            {activeSection === 'appointments' && <Appointments />}
             {activeSection === 'activity' && <ActivityPage />}
-
             {activeSection === 'resources' && <ResourcesPage />}
+            {activeSection === 'communication' && <Communication />}
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
@@ -144,8 +105,8 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-4">
-                    <EmergencyContact name="John Doe (Son)" phone="(555) 123-4567" />
-                    <EmergencyContact name="Jane Smith (Daughter)" phone="(555) 987-6543" />
+                    <EmergencyContact name="John Doe (Son)" phone="(555) 123-4567" onCall={() => handleEmergencyCall('Calling John Doe (Son)...')} />
+                    <EmergencyContact name="Jane Smith (Daughter)" phone="(555) 987-6543" onCall={() => handleEmergencyCall('Calling Jane Smith (Daughter)...')} />
                   </ul>
                 </CardContent>
               </Card>
@@ -155,19 +116,19 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-4">
-                    <Button className="flex items-center justify-center">
+                    <Button onClick={() => setActiveSection('communication')} className="flex items-center justify-center">
                       <MessageSquare className="mr-2" size={16} />
                       Message Doctor
                     </Button>
-                    <Button className="flex items-center justify-center">
+                    <Button onClick={() => handleEmergencyCall('Calling Emergency Services...')} className="flex items-center justify-center">
                       <PhoneCall className="mr-2" size={16} />
                       Emergency Call
                     </Button>
-                    <Button className="flex items-center justify-center">
+                    <Button onClick={() => setActiveSection('activity')} className="flex items-center justify-center">
                       <Target className="mr-2" size={16} />
                       Set Health Goal
                     </Button>
-                    <Button className="flex items-center justify-center">
+                    <Button onClick={() => setActiveSection('appointments')} className="flex items-center justify-center">
                       <Brain className="mr-2" size={16} />
                       Mental Health Check
                     </Button>
@@ -178,23 +139,29 @@ export default function Dashboard() {
           </main>
         </div>
       </div>
+
+      {/* Emergency Modal */}
+      <EmergencyModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} message={modalMessage} />
     </SidebarProvider>
   )
 }
 
 interface EmergencyContactProps {
-  name: string;
-  phone: string;
+  name: string
+  phone: string
+  onCall: () => void
 }
 
-function EmergencyContact({ name, phone }:EmergencyContactProps ) {
+function EmergencyContact({ name, phone, onCall }: EmergencyContactProps) {
   return (
     <li className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
       <div>
         <h4 className="font-semibold">{name}</h4>
         <p className="text-sm text-gray-600">{phone}</p>
       </div>
-      <Button variant="outline" size="sm">Call</Button>
+      <Button variant="outline" size="sm" onClick={onCall}>
+        Call
+      </Button>
     </li>
   )
 }

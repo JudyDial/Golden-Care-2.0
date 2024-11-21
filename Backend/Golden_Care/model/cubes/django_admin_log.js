@@ -17,16 +17,6 @@ cube(`django_admin_log`, {
       primary_key: true
     },
     
-    object_id: {
-      sql: `object_id`,
-      type: `string`
-    },
-    
-    object_repr: {
-      sql: `object_repr`,
-      type: `string`
-    },
-    
     change_message: {
       sql: `change_message`,
       type: `string`
@@ -34,6 +24,16 @@ cube(`django_admin_log`, {
     
     user_id: {
       sql: `user_id`,
+      type: `string`
+    },
+    
+    object_id: {
+      sql: `object_id`,
+      type: `string`
+    },
+    
+    object_repr: {
+      sql: `object_repr`,
       type: `string`
     },
     

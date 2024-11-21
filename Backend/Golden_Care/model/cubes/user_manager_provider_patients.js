@@ -14,13 +14,13 @@ cube(`user_manager_provider_patients`, {
       primary_key: true
     },
     
-    patient_id: {
-      sql: `patient_id`,
+    provider_id: {
+      sql: `provider_id`,
       type: `string`
     },
     
-    provider_id: {
-      sql: `provider_id`,
+    patient_id: {
+      sql: `patient_id`,
       type: `string`
     }
   },

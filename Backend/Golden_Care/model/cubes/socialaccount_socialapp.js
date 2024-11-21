@@ -24,11 +24,6 @@ cube(`socialaccount_socialapp`, {
       type: `string`
     },
     
-    client_id: {
-      sql: `client_id`,
-      type: `string`
-    },
-    
     provider_id: {
       sql: `provider_id`,
       type: `string`
@@ -39,13 +34,18 @@ cube(`socialaccount_socialapp`, {
       type: `string`
     },
     
-    settings: {
-      sql: `settings`,
+    client_id: {
+      sql: `client_id`,
       type: `string`
     },
     
     key: {
       sql: `key`,
+      type: `string`
+    },
+    
+    settings: {
+      sql: `settings`,
       type: `string`
     }
   },

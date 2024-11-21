@@ -8,23 +8,18 @@ cube(`user_manager_provider`, {
   },
   
   dimensions: {
-    verified: {
-      sql: `verified`,
-      type: `boolean`
-    },
-    
     status: {
       sql: `status`,
       type: `string`
     },
     
-    address: {
-      sql: `address`,
-      type: `string`
+    verified: {
+      sql: `verified`,
+      type: `boolean`
     },
     
-    customuser_ptr_id: {
-      sql: `customuser_ptr_id`,
+    location: {
+      sql: `location`,
       type: `string`
     },
     
@@ -33,8 +28,13 @@ cube(`user_manager_provider`, {
       type: `string`
     },
     
-    location: {
-      sql: `location`,
+    customuser_ptr_id: {
+      sql: `customuser_ptr_id`,
+      type: `string`
+    },
+    
+    address: {
+      sql: `address`,
       type: `string`
     }
   },
