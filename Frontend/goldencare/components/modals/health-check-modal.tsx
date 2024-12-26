@@ -47,6 +47,7 @@ export function HealthCheckModal() {
       setResult(resultData.message)
     } catch (error) {
       setResult("An error occurred while fetching the prediction.")
+      console.error(error)
     }
   }
 

@@ -72,7 +72,7 @@ export function SelectItem({
   value: string;
   children: React.ReactNode;
 }) {
-  const { selected } = useContext(SelectContext);
+//   const { selected } = useContext(SelectContext);
 
   return (
     <Listbox.Option

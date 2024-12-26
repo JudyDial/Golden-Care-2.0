@@ -10,11 +10,11 @@
 #include "spo2_algorithm.h" // For accurate SpO2 and heart rate calculation
 
 // WiFi credentials
-const char* ssid = "Redmi 9T";
-const char* password = "miriam610";
+const char* ssid = "scit";
+const char* password = "12345678";
 
 // MQTT broker settings
-const char* mqtt_server = "192.168.89.200";
+const char* mqtt_server = "192.168.0.105";
 const int mqtt_port = 1883;
 const char* mqtt_topic = "sensor/data";
 
