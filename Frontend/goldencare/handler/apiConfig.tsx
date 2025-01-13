@@ -1,7 +1,7 @@
 // const BASE_URL = 'http://192.168.0.105:80';
 // const BASE_URL = 'http://172.16.105.74:8001';
-const BASE_URL = 'http://127.0.0.1:80';
-// const BASE_URL = 'http://127.0.0.1:8000';
+// const BASE_URL = 'http://127.0.0.1:80';
+const BASE_URL = 'http://127.0.0.1:8000';
 
 // Individual
 export const GET_INDIVIDUAL_URL = `${BASE_URL}/Patients/pk`;
