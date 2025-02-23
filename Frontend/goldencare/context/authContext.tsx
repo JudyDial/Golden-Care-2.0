@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (isAuthenticated) {
       refreshUserData();
     }
-  }, []);
+  }, [isAuthenticated]);
 
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
 
     }
-  }, [user]); // This effect runs whenever `user` changes
+  }, [user,router]); // This effect runs whenever `user` changes
 
   const login = async (email: string, password: string) => {
     try {

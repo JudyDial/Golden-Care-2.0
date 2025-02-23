@@ -1,6 +1,7 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse, AxiosRequestConfig,InternalAxiosRequestConfig } from 'axios';
 import { 
   BASE_URL,
+  REFRESH_TOKEN,
   GET_APPOINTMENTS_URL, 
   GET_APPOINTMENT_URL, 
   CREATE_APPOINTMENT_URL, 
@@ -26,19 +27,71 @@ const api = axios.create({
 });
 
 // Add a request interceptor to include the access token in headers
+
+// Add a request interceptor to include the access token in headers
 api.interceptors.request.use(
-  async (config: any) => {
+  async (config: AxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
     try {
       const token = await localStorage.getItem('accessToken');
       if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers = {
+          ...config.headers,
+          Authorization: `Bearer ${token}`,
+        };
+      } else {
+        config.headers = {}; // provide a default value for headers
       }
     } catch (error) {
       console.error('Error retrieving access token:', error);
     }
-    return config;
+    return config as InternalAxiosRequestConfig; // cast config to InternalAxiosRequestConfig
   },
   (error: AxiosError) => {
+    return Promise.reject(error);
+  }
+);
+
+// Handle refresh token logic
+api.interceptors.response.use(
+  (response: AxiosResponse) => response,
+  async (error: AxiosError) => {
+    const originalRequest: (AxiosRequestConfig & { _retry?: boolean }) | undefined = error.config;
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
+
+    if (originalRequest && error.response && error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshToken = await localStorage.getItem('refreshToken');
+
+        if (refreshToken) {
+          const response = await api.post(REFRESH_TOKEN, { refresh: refreshToken });
+
+          if (response.status === 200) {
+            await localStorage.setItem('accessToken', response.data.access);
+            if (originalRequest.headers) {
+              originalRequest.headers['Authorization'] = `Bearer ${response.data.access}`;
+            }
+            return api(originalRequest);
+          } else {
+            await localStorage.removeItem('accessToken');
+            await localStorage.removeItem('refreshToken');
+          }
+        }
+
+        await localStorage.removeItem('accessToken');
+        await localStorage.removeItem('refreshToken');
+        return Promise.reject(error);
+      } catch (refreshError) {
+        console.error('Error refreshing token:', refreshError);
+        await localStorage.removeItem('accessToken');
+        await localStorage.removeItem('refreshToken');
+        return Promise.reject(refreshError);
+      }
+    }
+
     return Promise.reject(error);
   }
 );
@@ -65,7 +118,15 @@ export const getAppointment = async (id: string) => {
 };
 
 // Create a new appointment
-export const createAppointment = async (appointmentData: any) => {
+interface AppointmentData {
+  // Define the structure of appointmentData here
+  // Example:
+  title: string;
+  date: string;
+  // Add other fields as needed
+}
+
+export const createAppointment = async (appointmentData: AppointmentData) => {
   try {
     const response = await api.post(CREATE_APPOINTMENT_URL, appointmentData);
     return response.data;
@@ -75,7 +136,7 @@ export const createAppointment = async (appointmentData: any) => {
 };
 
 // Update an existing appointment
-export const updateAppointment = async (id: string, appointmentData: any) => {
+export const updateAppointment = async (id: string, appointmentData: AppointmentData) => {
   try {
     const url = UPDATE_APPOINTMENT_URL.replace('{id}', id);
     const response = await api.patch(url, appointmentData);

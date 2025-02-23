@@ -120,7 +120,7 @@ services:
     image: emqx:latest
     environment:
       - EMQX_LISTENERS__TCP__DEFAULT__BIND=1883
-      - EMQX_ADMIN_PASSWORD=admin  # Set admin password
+      - EMQX_ADMIN_PASSWORD=user@12345  # Set admin password
       - EMQX_ADMIN_USER=admin      # Set admin username
       - EMQX_LOADED_MODULES=emqx_management,emqx_dashboard
     ports:

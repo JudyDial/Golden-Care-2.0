@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse, AxiosRequestConfig,InternalAxiosRequestConfig } from 'axios';
 import {
   BASE_URL,
   REFRESH_TOKEN,
@@ -29,17 +29,21 @@ const api = axios.create({
 
 // Add a request interceptor to include the access token in headers
 api.interceptors.request.use(
-  async (config: any) => {
+  async (config: AxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
     try {
       const token = await localStorage.getItem('accessToken');
-
       if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers = {
+          ...config.headers,
+          Authorization: `Bearer ${token}`,
+        };
+      } else {
+        config.headers = {}; // provide a default value for headers
       }
     } catch (error) {
       console.error('Error retrieving access token:', error);
     }
-    return config;
+    return config as InternalAxiosRequestConfig; // cast config to InternalAxiosRequestConfig
   },
   (error: AxiosError) => {
     return Promise.reject(error);
@@ -50,7 +54,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
-    const originalRequest: any = error.config;
+    const originalRequest: (AxiosRequestConfig & { _retry?: boolean }) | undefined = error.config;
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
 
     if (originalRequest && error.response && error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
@@ -88,6 +95,7 @@ api.interceptors.response.use(
   }
 );
 
+
 // Alert Management Handlers
 
 // Get all alerts (for providers) or patient-specific alerts
@@ -111,7 +119,13 @@ export const getAlert = async (id: string) => {
 };
 
 // Create a new alert
-export const createAlert = async (alertData: any) => {
+interface AlertData {
+  title: string;
+  description: string;
+  // Add other fields as necessary
+}
+
+export const createAlert = async (alertData: AlertData) => {
   try {
     const response = await api.post(CREATE_ALERT_URL, alertData);
     return response.data;
@@ -121,7 +135,7 @@ export const createAlert = async (alertData: any) => {
 };
 
 // Update a specific alert by ID
-export const updateAlert = async (id: string, alertData: any) => {
+export const updateAlert = async (id: string, alertData: AlertData) => {
   try {
     const response = await api.patch(UPDATE_ALERT_URL.replace('{id}', id), alertData);
     return response.data;

@@ -1,4 +1,4 @@
-import axios ,{AxiosError,AxiosResponse} from 'axios';
+import axios, { AxiosError, AxiosResponse, AxiosRequestConfig,InternalAxiosRequestConfig } from 'axios';
 import { 
   // user management
   BASE_URL, 
@@ -29,17 +29,21 @@ const api = axios.create({
 
 // Add a request interceptor to include the access token in headers
 api.interceptors.request.use(
-  async (config: any) => {
+  async (config: AxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
     try {
       const token = await localStorage.getItem('accessToken');
-
       if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers = {
+          ...config.headers,
+          Authorization: `Bearer ${token}`,
+        };
+      } else {
+        config.headers = {}; // provide a default value for headers
       }
     } catch (error) {
       console.error('Error retrieving access token:', error);
     }
-    return config;
+    return config as InternalAxiosRequestConfig; // cast config to InternalAxiosRequestConfig
   },
   (error: AxiosError) => {
     return Promise.reject(error);
@@ -50,7 +54,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
-    const originalRequest: any = error.config;
+    const originalRequest: (AxiosRequestConfig & { _retry?: boolean }) | undefined = error.config;
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
 
     if (originalRequest && error.response && error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
@@ -87,6 +94,7 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 
 // User Authentication Handlers
 export const loginUser = async (email: string, password: string) => {
@@ -133,7 +141,15 @@ export const getIndividual = async () => {
   }
 };
 
-export const updateIndividual = async (formData: any) => {
+interface IndividualFormData {
+  // Define the structure of formData here
+  // Example:
+  name: string;
+  age: number;
+  // Add other fields as needed
+}
+
+export const updateIndividual = async (formData: IndividualFormData) => {
   try {
     const response = await api.patch(UPDATE_INDIVIDUAL_URL, formData);
     return response.data;
